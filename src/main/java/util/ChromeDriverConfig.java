@@ -55,35 +55,20 @@ public class ChromeDriverConfig implements CleanerInterface
         File driverFile;
         try
         {
-            // REST to download the chromedriver file from our nexus server.
-            // http://nexusfiles:8081/repository/maven-releases/XANT/ai/chromedriver/78/chromedriver-78-linux.bin
             String version = SystemProperties.getParam(SystemProperties.CHROME_DRIVER_VERSION);
-            String baseUrl = SystemProperties.getParam(SystemProperties.CHROME_DRIVER_URL);
-            String url = baseUrl + "/" + version + "/chromedriver-" + version + osPlatform;
-            Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .addHeader("Content-Type", contentType)
-                .build();
+            String baseUrl = "chromedriver/" + version + "/" + driverExe;
 
-            OkHttpClient client = new OkHttpClient();
-            Response response = client.newCall(request).execute();
-            if (!response.isSuccessful())
-                throw new Exception("Unable to download the chromedriver executable...");
-
-            // Open the byte stream (response) so we can copy the file download to an output stream.
-            InputStream inputStream = response.body().byteStream();
+            InputStream driverStream = SystemProperties.class.getClassLoader().getResourceAsStream(baseUrl);
 
             // Create a temporary file, which will be the chromedriver.
-            driverFile = File.createTempFile(driverExe, ".exe");
+            driverFile = File.createTempFile(osPlatform, ".exe");
             driverFile.deleteOnExit();
 
             // Copy the byte stream to the temporary output file.
             OutputStream outputStream = new FileOutputStream(driverFile);
-            IOUtils.copy(inputStream, outputStream);
+            IOUtils.copy(driverStream, outputStream);
             outputStream.close();
-            inputStream.close();
-            response.close();
+            driverStream.close();
 
             log.info("Temporary chromedriver file: {}", driverFile);
 
@@ -210,23 +195,23 @@ public class ChromeDriverConfig implements CleanerInterface
         if (os.contains("nix") || os.contains("nux"))
         {
             log.debug("Linux/Unix OS");
-            driverExe = "chromedriver_linux64";
+            driverExe = "chromedriver_linux";
             contentType = "application/x-sharedlib";
-            osPlatform = "-linux.bin";
+            osPlatform = "chromedriver_linux";
         }
         else if (os.contains("mac") || os.contains("os x"))
         {
             log.debug("Mac");
-            driverExe = "chromedriver_mac_os";
+            driverExe = "chromedriver_mac";
             contentType = "text/plain";
-            osPlatform = "-macos.bin";
+            osPlatform = "chromedriver_mac";
         }
         else
         {
             log.debug("Windows");
             driverExe = "chromedriver.exe";
             contentType = "application/x-executable";
-            osPlatform = "-windows.exe";
+            osPlatform = "chromedriver.exe";
         }
 
         return this;
