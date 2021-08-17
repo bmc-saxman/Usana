@@ -22,9 +22,6 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.20'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
 
-//    testAnnotationProcessor 'org.projectlombok:lombok'
-//    testCompileOnly 'org.projectlombok:lombok'
-
     implementation 'org.codehaus.groovy:groovy-all:2.3.11'
     testCompileOnly group: 'junit', name: 'junit', version: '4.12'
     // Groovy
@@ -33,14 +30,7 @@ dependencies {
     implementation "com.google.guava:guava:27.0.1-jre"
 
     // Spock
-// https://mvnrepository.com/artifact/org.spockframework/spock-core  latest update
-//    compile group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5'
-//    testImplementation 'org.spockframework:spock-core:1.1-groovy-2.4'
     implementation 'org.spockframework:spock-core:1.0-groovy-2.4'
-
-// https://mvnrepository.com/artifact/com.anotherchrisberry/spock-retry
-//    compile 'com.anotherchrisberry:spock-retry:0.6.5'
-//    compile 'com.anotherchrisberry.spock:extensions-retry:0.3-snap'
 
     implementation group: 'org.apache.ant', name: 'ant', version: '1.9.6'
 
@@ -55,12 +45,10 @@ dependencies {
     implementation "org.apache.commons:commons-lang3:3.8.1"
     implementation "org.apache.httpcomponents:httpclient:4.5.6"
 
-// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4, needed for Spock upgrade
     implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
 
     // IDM Rest
     implementation 'org.flowable:flowable-idm-rest:6.3.0'
-//    compile 'idmrest:idmrest:0.0.1'
 
     //JWT decoder (group:name:version)
     implementation 'com.auth0:java-jwt:3.3.0'
@@ -72,7 +60,6 @@ dependencies {
     implementation 'org.codeartisans:org.json:20130603'
 
     // The code uses the SLF4J logging API at compile time
-//    compile 'org.slf4j:slf4j-api:1.7.12'
     implementation group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.8'
 
     // Matchers support
