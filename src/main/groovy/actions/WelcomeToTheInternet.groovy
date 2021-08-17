@@ -31,6 +31,25 @@ class WelcomeToTheInternet implements CleanerInterface
     }
 
     /**
+     * Open and return the text found in the A/B testing page.
+     * @return {@link String}
+     */
+    String abTesting()
+    {
+        String path = ".//*[text() = 'A/B Testing']"
+        WebElement item = sm.waitForAvailable(By.xpath(path))
+        item.click()
+
+        path = ".//*[@id = 'content']//p"
+        item = sm.waitForAvailable(By.xpath(path))
+
+        Thread.sleep(2000) // Just some time to see the page
+        String text = item.getText()
+
+        return text
+    }
+
+    /**
      * Open the Challenging DOM link
      * @return {@link WelcomeToTheInternet}
      */
@@ -41,6 +60,26 @@ class WelcomeToTheInternet implements CleanerInterface
         item.click()
 
         return this
+    }
+
+    /**
+     * Return text from a specific location in the large tablee.
+     * @return
+     */
+    String largeDeepDOM()
+    {
+        // Open the Large & Deep DOM page.
+        String path = ".//*[text() = 'Large & Deep DOM']"
+        WebElement item = sm.waitForAvailable(By.xpath(path))
+        item.click()
+
+        // Grab a specific column and row in the table.
+        path = ".//*[@id = 'large-table']//tr[@class= 'row-40']/td[@class = 'column-4']"
+        item = sm.waitForAvailable(By.xpath(path))
+
+        Thread.sleep(2000) // Just some time to see the page.
+        String text = item.getText()
+        return text
     }
 
     /**
@@ -84,6 +123,7 @@ class WelcomeToTheInternet implements CleanerInterface
         String path = ".//*[@id = 'canvas']"
         WebElement canvas = sm.waitForAvailable(By.xpath(path))
 
+        Thread.sleep(2000) // Just some time to see the page
         return canvas.isDisplayed()
     }
 

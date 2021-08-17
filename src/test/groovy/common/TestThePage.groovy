@@ -3,6 +3,7 @@ package common
 import actions.WelcomeToTheInternet
 import spock.lang.Shared
 import spock.lang.Stepwise
+import util.Text
 
 @Stepwise
 class TestThePage extends SpecBase
@@ -46,5 +47,27 @@ class TestThePage extends SpecBase
 
         then:
         true
+    }
+
+    def "Test 3"()
+    {
+        when:
+        String text = welcomeToTheInternet
+            .open()
+            .abTesting()
+
+        then:
+        Text.findSubstring(text, "Also known as split testing")
+    }
+
+    def "Test 4"()
+    {
+        when:
+        String text = welcomeToTheInternet
+            .open()
+            .largeDeepDOM()
+
+        then:
+        Text.findSubstring(text, "40.4")
     }
 }
