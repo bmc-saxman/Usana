@@ -21,6 +21,4 @@ screen it should be set to :0, but can be set to other values if there is a
 graphics system like xvfb or Xephyr installed and running. Then it could be
 set to :1, or any other virtual value that the graphics system supports.
 
-- The test can be run using the gradlew command line.
-
-- gradlew test --tests TestThePage
+- The test can be run using the gradlew command line.    gradlew test --tests TestThePage
