@@ -9,7 +9,9 @@ or newer.
 
 - In the properties.ini file you can set the browser, i.e. googlechrome or firefox
 at this time but others could be added by also modifying the SeleniumManager
-class code to add the appropriate browser initialization code.
+class code to add the appropriate browser initialization code. I have done most
+of my work on the chrome browser and did not test Firefox at this time. So please
+use the chrome browser for now.
 
 - You can also specify the chromedriver version. At this time I have only 
 included version 90, 91, and 92. 92 being the latest.
