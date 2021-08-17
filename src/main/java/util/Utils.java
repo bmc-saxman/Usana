@@ -1,7 +1,5 @@
 package util;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -11,7 +9,6 @@ import java.util.TimeZone;
  *
  * @author bchristiansen
  */
-@Slf4j
 public class Utils
 {
     /**
@@ -35,7 +32,6 @@ public class Utils
     public static Calendar getCalendarInstance(String timeZone)
     {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-        log.info("Setting the current time zone to : {}", calendar.getTimeZone().getDisplayName());
         return calendar;
     }
     /**
@@ -51,7 +47,7 @@ public class Utils
             Thread.sleep(seconds * 1000);
         } catch (InterruptedException ie)
         {
-            System.out.println("Wait Interrupted");
+            System.out.print("Wait Interrupted");
         }
     }
 

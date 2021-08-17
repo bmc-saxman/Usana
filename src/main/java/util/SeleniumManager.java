@@ -3,8 +3,8 @@ package util;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.openqa.grid.common.exception.RemoteNotReachableException;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -472,36 +472,20 @@ public class SeleniumManager extends SeleniumBase implements CleanerInterface
                 // This makes sure that all popups are allowed. Only needed for PD.
                 try
                 {
-                    if (!SystemProperties.getParam(SystemProperties.SYSTEM).contains("pb"))
-                    {
-                        // Open the chrome settings so we can set it to allow popups.
-                        // This is probably not needed for Playbooks.
-                        driver.get("chrome://settings/content/popups");
-
-                        ArrayList<String> menuShadow = new ArrayList<>();
-                        menuShadow.add("#main");
-                        menuShadow.add("settings-basic-page");
-                        menuShadow.add("#basicPage > settings-section.expanded > settings-privacy-page");
-                        menuShadow.add("#pages > settings-subpage > category-default-setting");
-                        menuShadow.add("settings-toggle-button#toggle");
-                        menuShadow.add("#control");
-                        expandShadowDom(menuShadow, By.cssSelector("#knob")).click();
-                    }
-
-                    log.debug("Chrome driver started. Setting position and size...");
+                    System.out.print("Chrome driver started. Setting position and size...");
                     setWindowSize(size.width, size.height);
 
                     // Focus back to the main window, just in case.
                     driver.switchTo().window(mainWindow);
                 } catch (RemoteNotReachableException nrex)
                 {
-                    log.warn("Try to reach and size the windows one more time.");
+                    System.out.print("Try to reach and size the windows one more time.");
                     //driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
                     driver.get("about:blank");
                     setWindowSize(size.width, size.height);
                 } catch (Exception ex)
                 {
-                    log.error("There was a problem in the content settings or setting up the chromedriver...");
+                    System.out.print("There was a problem in the content settings or setting up the chromedriver...");
                     driver.close();
                     throw ex;
                 }

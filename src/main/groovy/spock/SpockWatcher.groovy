@@ -1,36 +1,34 @@
 package spock
 
-import groovy.util.logging.Slf4j
 import org.json.JSONException
 import org.json.JSONObject
 import org.junit.rules.TestWatchman
 import org.junit.runners.model.FrameworkMethod
 
 /**
- * Created by jcox on 9/23/2015.
+ * @author bchristiansen
  */
-@Slf4j
-public class SpockWatcher extends TestWatchman
+class SpockWatcher extends TestWatchman
 {
-    private static JSONObject qTestJSON;
-    private static ArrayList<JSONObject> testResults;
-    private static boolean testPassed = false;
+    private static JSONObject qTestJSON
+    private static ArrayList<JSONObject> testResults
+    private static boolean testPassed = false
 
     static
     {
-        initialize();
+        initialize()
     }
 
     protected static void initialize()
     {
         // Setup up the test result json data.
-        testResults = new ArrayList<JSONObject>();
-        qTestJSON = new JSONObject();
+        testResults = new ArrayList<JSONObject>()
+        qTestJSON = new JSONObject()
     }
 
-    public static ArrayList<JSONObject> getTestResults()
+    static ArrayList<JSONObject> getTestResults()
     {
-        return testResults;
+        return testResults
     }
 
     /**
@@ -42,22 +40,22 @@ public class SpockWatcher extends TestWatchman
      * @param method
      */
     @Override
-    public void succeeded(FrameworkMethod method)
+    void succeeded(FrameworkMethod method)
     {
-        println method.getName() + " " + "success!\n" + method.getClass().getSimpleName();
-        testPassed = true;
+        System.out.print method.getName() + " " + "success!\n" + method.getClass().getSimpleName()
+        testPassed = true
 
         try
         {
-            qTestJSON.put("testStatus", "PASS");
-            qTestJSON.put('testResults', "");
-            qTestJSON.put('failout', "");
+            qTestJSON.put("testStatus", "PASS")
+            qTestJSON.put('testResults', "")
+            qTestJSON.put('failout', "")
         } catch (JSONException je)
         {
-            je.printStackTrace();
+            je.printStackTrace()
         }
 
-        testResults.add(qTestJSON);
+        testResults.add(qTestJSON)
     }
 
     /**
@@ -69,43 +67,43 @@ public class SpockWatcher extends TestWatchman
      * @param method
      */
     @Override
-    public void failed(Throwable e, FrameworkMethod method)
+    void failed(Throwable e, FrameworkMethod method)
     {
-        LinkedHashMap<String, String> listItems = new LinkedHashMap<>();
+        LinkedHashMap<String, String> listItems = new LinkedHashMap<>()
 
-        testPassed = false;
+        testPassed = false
 
         for (StackTraceElement ele : e.getStackTrace())
         {
-            String traceText = ele.getFileName();
+            String traceText = ele.getFileName()
             if (Text.isSet(traceText))
             {
                 if (traceText.contains(".groovy") || ele.toString().contains("insidesales"))
-                    listItems.put(traceText, ele.toString());
+                    listItems.put(traceText, ele.toString())
             }
         }
 
-        log.debug(method.getName() + " failed\n" + method.getClass().getSimpleName());
-        String stack = method.getName() + " failed\n" + e.getClass().getSimpleName() + "\n";
+        log.debug(method.getName() + " failed\n" + method.getClass().getSimpleName())
+        String stack = method.getName() + " failed\n" + e.getClass().getSimpleName() + "\n"
         if (listItems.size() > 0)
-            listItems.each { stack += "${it}\n"; }
+            listItems.each { stack += "${it}\n" }
         else
-            e.getStackTrace().each { stack += "${it}\n"; }
+            e.getStackTrace().each { stack += "${it}\n" }
 
 
-        String errorMsg = e.getMessage();
+        String errorMsg = e.getMessage()
 
         try
         {
-            qTestJSON.put("testStatus", "FAIL");
-            qTestJSON.put('testResults', stack);
-            qTestJSON.put('failout', errorMsg);
+            qTestJSON.put("testStatus", "FAIL")
+            qTestJSON.put('testResults', stack)
+            qTestJSON.put('failout', errorMsg)
         } catch (JSONException je)
         {
-            je.printStackTrace();
+            je.printStackTrace()
         }
 
-        testResults.add(qTestJSON);
+        testResults.add(qTestJSON)
     }
 
     /**
@@ -117,32 +115,32 @@ public class SpockWatcher extends TestWatchman
      * @param e {@link Throwable, such as any exception}
      * @param method
      */
-    public static void externalFailure(Throwable e, String method)
+    static void externalFailure(Throwable e, String method)
     {
-        println method + " failed\n";
+        System.out.print method + " failed\n"
 
-        testPassed = false;
+        testPassed = false
 
-        String stack = method + " failed\n" + e.getClass().getSimpleName() + "\n";
-        e.getStackTrace().each { stack += "${it}\n"; }
+        String stack = method + " failed\n" + e.getClass().getSimpleName() + "\n"
+        e.getStackTrace().each { stack += "${it}\n" }
 
-        String errorMsg = e.getMessage();
+        String errorMsg = e.getMessage()
 
         try
         {
-            qTestJSON.put("testStatus", "FAIL");
-            qTestJSON.put('testResults', stack);
-            qTestJSON.put('failout', errorMsg);
+            qTestJSON.put("testStatus", "FAIL")
+            qTestJSON.put('testResults', stack)
+            qTestJSON.put('failout', errorMsg)
         } catch (JSONException je)
         {
-            je.printStackTrace();
+            je.printStackTrace()
         }
 
-        testResults.add(qTestJSON);
+        testResults.add(qTestJSON)
     }
 
-    public static boolean isTestPassed()
+    static boolean isTestPassed()
     {
-        return testPassed;
+        return testPassed
     }
 }

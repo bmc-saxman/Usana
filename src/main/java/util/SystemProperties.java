@@ -1,27 +1,20 @@
 package util;
 
-import groovy.json.JsonSlurper;
-import http.HttpUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.ini4j.Ini;
 import org.ini4j.Profile.Section;
-import org.json.JSONObject;
-import org.junit.Assert;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.*;
 
 /**
  * @author bchristiansen
  * Many (possible) values related to system information.
  */
-@Slf4j
 public class SystemProperties
 {
     // General map keys.
@@ -228,7 +221,7 @@ public class SystemProperties
         cfgSections = ini.getAll(subdomainSection);
         if (cfgSections == null)
         {
-            log.error("The subsection: {} was not found in the properties.ini file.", subdomainSection);
+            System.out.print("The subsection: {} was not found in the properties.ini file." + subdomainSection);
             throw new Exception("The subsection: " + subdomainSection + " was not found in the properties.ini file.");
         }
 
@@ -247,81 +240,6 @@ public class SystemProperties
         mVal = Text.isSet(getParam(MED_WAIT)) ? Integer.parseInt(getParam(MED_WAIT)) : 10;
         lVal = Text.isSet(getParam(LONG_WAIT)) ? Integer.parseInt(getParam(LONG_WAIT)) : 20;
         xVal = Text.isSet(getParam(XLONG_WAIT)) ? Integer.parseInt(getParam(XLONG_WAIT)) : 300;
-
-        // Pod contains 'staging' or some other value. Any other value is assumed to be production.
-        if (getParam(POD).equalsIgnoreCase("staging"))
-        {
-//            allSystemProperties.put(IDM_REST_URL, "https://idm-api.staging.insidesales.com");
-            allSystemProperties.put(MGR_TEAM_MEMBER_URL, "https://teams-api-staging.insidesales.com");
-            allSystemProperties.put(MGR_CALLPATH_URL, "https://call-path-manager-staging.pdlmpapis.insidesales.com");
-        }
-        else
-        {
-//            allSystemProperties.put(IDM_REST_URL, "https://idm-api.insidesales.com");
-            allSystemProperties.put(MGR_TEAM_MEMBER_URL, "https://teams-api.insidesales.com");
-            allSystemProperties.put(MGR_CALLPATH_URL, "https://call-path-manager-" + getParam(POD) + ".pdlmpapis.insidesales.com");
-        }
-    }
-
-    /**
-     * Add values from the AIM service to the system properties map. Values could be over-written.
-     * This takes the highest precedence and should be called last, after addDefaultsToMap() and
-     * addIniValuesToMap()
-     */
-    private static void addTestParamsToMap() throws Exception
-    {
-        Iterator it = testParams.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry pair = (Map.Entry) it.next();
-            String key = (String) pair.getKey();
-            if (Text.isSet(valueToStringOrEmpty(pair.getValue())))
-            {
-                if (!key.equals("configOverride"))
-                {
-                    allSystemProperties.put((String) pair.getKey(), pair.getValue());
-                }
-                else
-                {
-                    List configOverrides = (List) pair.getValue();
-                    for (Object row : configOverrides)
-                    {
-                        Map entryPair = (Map) row;
-                        boolean overrideValue = (boolean) entryPair.get("override");
-                        // If the override is false we don't continue
-                        if (!overrideValue)
-                            continue;
-
-                        // Otherwise continue as normal
-                        String configKey = (String) entryPair.get("key");
-                        String configValue = (String) entryPair.get("value");
-                        allSystemProperties.put(configKey, configValue);
-                    }
-                }
-            }
-            it.remove();
-        }
-
-        // If we are at this code, there should be a login url from the database
-        // passed into the test params.
-        if (Text.isSet(getParam(SUBDOMAIN_URL)))
-            setParam(BASEURL, getParam(SUBDOMAIN_URL));
-        else if (Text.isSet(getParam(URL)))
-            setParam(BASEURL, getParam(URL));
-
-        // If the BASEURL is not set, do we throw an Exception?
-        if (!Text.isSet(getParam(BASEURL)))
-            throw new Exception("The BASEURL was not set.");
-
-        // Set the chromeVersion from the DB entry into the map so it matches the docker
-        // image and downloads the chrome chrome driver version.
-        allSystemProperties.put(CHROME_DRIVER_VERSION, getParam("chromeVersion"));
-
-        // Set the wait internal variables.
-        sVal = Text.isSet(getParam(SHORT_WAIT)) ? Integer.valueOf(getParam(SHORT_WAIT)) : 2;
-        mVal = Text.isSet(getParam(MED_WAIT)) ? Integer.valueOf(getParam(MED_WAIT)) : 10;
-        lVal = Text.isSet(getParam(LONG_WAIT)) ? Integer.valueOf(getParam(LONG_WAIT)) : 20;
-        xVal = Text.isSet(getParam(XLONG_WAIT)) ? Integer.valueOf(getParam(XLONG_WAIT)) : 300;
     }
 
     private static String valueToStringOrEmpty(Object object)
@@ -357,7 +275,7 @@ public class SystemProperties
                 return pair.get("value");
         }
 
-        log.warn("No value was found for the given key: {}", key);
+        System.out.print("No value was found for the given key: {}" + key);
         return "";
     }
 
@@ -409,11 +327,6 @@ public class SystemProperties
     public static Map getMappedParams()
     {
         return allSystemProperties;
-    }
-
-    public static Map getTestParams()
-    {
-        return testParams;
     }
 
     /**
@@ -480,17 +393,6 @@ public class SystemProperties
     }
 
     /**
-     * Output a UTF-8 encoded string properly.
-     *
-     * @param args List of arguments to print.
-     */
-    public static void print(String args)
-    {
-        //  PrintStream stdout = new PrintStream(System.out, autoFlush, encoding);
-        Assert.fail("Not yet implemented");
-    }
-
-    /**
      * Read the system properties, either from the command line or the properties.ini files.
      */
     private static void readProperties()
@@ -508,11 +410,9 @@ public class SystemProperties
             addDefaultsToMap();
 
             // The test is being run locally.
-            log.info("Load INI values.");
             addIniValuesToMap();
         } catch (Exception e)
         {
-            log.error("The stack trace: {}", e.getMessage());
             setParam(PROPERTIES_ERROR, "true");
             setParam(PROPERTIES_ERROR_MSG, e.getMessage());
         }

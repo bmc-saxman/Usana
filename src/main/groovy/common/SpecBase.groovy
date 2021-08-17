@@ -1,15 +1,13 @@
 package common
 
-
 import groovy.util.logging.Slf4j
 import spock.SpockWatcher
 import spock.lang.Stepwise
 import util.ActiveWindows
 import util.SeleniumManager
-import util.SystemProperties
 
 /**
- * Created by Evan Hicken on 6/21/18.
+ * @author bchristiansen
  */
 @Slf4j
 @Stepwise
@@ -17,7 +15,7 @@ class SpecBase extends UtilSpecBase
 {
     private ActiveWindows baseWindow
 
-    void startUI(String crm)
+    void startUI()
     {
         // initialization is only done once
         sm = new SeleniumManager()
@@ -32,32 +30,15 @@ class SpecBase extends UtilSpecBase
             sm.activeWindows.put(SeleniumManager.CRM_WINDOW, baseWindow)
             mainWindow = baseWindow.windowReference
 
-            // Output the browser name.
-            log.debug("Using BROWSER={}", sm.getBrowser())
         } catch (Exception ex)
         {
             //catching the exception so we can die in test and clean up properly
-            log.error("[SpecBase] Setup error 'starting and prepping the Selenium Manager'.\n\tException Message: {}\n\tFatal. Throwing...", ex.getMessage())
             SpockWatcher.externalFailure(ex, "setupSpec > selenium")
             throw ex
         }
 
-        switch (crm)
-        {
-            case "sf":
-                driver.get("https://login.salesforce.com")
-                break
-            case "sfl":
-                driver.get("https://login.salesforce.com")
-                break
-            case "msd":
-//                driver.get(SystemProperties.getParam(SystemProperties.MSD_REST_URL))
-                // Land on the Sales Hub app URL directly.
-//                driver.get("https://pbmsdprod.crm.dynamics.com/main.aspx?appid=58273490-8b69-e911-a981-000d3a1d7b67")
-                driver.get(SystemProperties.getParam(SystemProperties.MSD_LOGIN_URL))
-                break
-            default:
-                driver.get(crm)
-        }
+        // Let's maximize the window for best access.
+        sm.maximize()
+        driver.get("http://the-internet.herokuapp.com/")
     }
 }

@@ -1,8 +1,6 @@
 package util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import util.CleanerInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,6 @@ public class Cleaner
         if (!cleanupList.contains(obj))
         {
             cleanupList.add(obj);
-            log.debug("Base Object Added to the util.Cleaner :: {}", obj.toString());
         }
     }
 
@@ -44,7 +41,6 @@ public class Cleaner
         if (!cleanupList.contains(obj))
         {
             cleanupTestList.add(obj);
-            log.debug("Local Object Added to the util.Cleaner :: {}", obj.toString());
         }
     }
 
@@ -53,9 +49,7 @@ public class Cleaner
      */
     public static void cleanup()
     {
-        log.debug("------------- Starting Base Cleanup ----------------");
         cleanup(getCleanupList());
-        log.debug("------------- Base Cleanup Finished ----------------");
     }
 
     /**
@@ -63,9 +57,7 @@ public class Cleaner
      */
     public static void cleanupTest()
     {
-        log.debug("------------- Starting Test Cleanup ----------------");
         cleanup(getTestCleanupList());
-        log.debug("------------- Test Cleanup Finished ----------------");
     }
 
     /**
@@ -73,8 +65,6 @@ public class Cleaner
      */
     public static void cleanup(List<CleanerInterface> cList)
     {
-        log.debug("------------- Cleaning ----------------");
-
         ListIterator<CleanerInterface> iterator = cList.listIterator(
             cList.size());
         int counter = 0;
@@ -85,19 +75,13 @@ public class Cleaner
             {
                 CleanerInterface obj = iterator.previous();
 
-                log.debug("[{}] Cleaning: {}", counter, obj.getClass().getName());
-
                 if (!obj.isClean())
                 {
                     obj.cleanup();
-                    log.debug("[{}] Successfully cleaned", counter);
                 }
-                else
-                    log.debug("[{}] Was already cleaned", counter);
             } catch (Exception e)
             {
-                log.debug("[{}] There was a problem cleaning the object.", counter);
-                log.trace(ExceptionUtils.getStackTrace(e));
+                System.out.print("[" + counter + "]" + " There was a problem cleaning the object.");
             } finally
             {
                 counter++;
@@ -105,8 +89,6 @@ public class Cleaner
         }
 
         cList.clear();
-
-        log.debug("------------- Finished Cleaning ----------------");
     }
 
     /**

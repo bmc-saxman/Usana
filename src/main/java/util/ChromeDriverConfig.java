@@ -2,9 +2,6 @@ package util;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.Platform;
@@ -70,9 +67,6 @@ public class ChromeDriverConfig implements CleanerInterface
             outputStream.close();
             driverStream.close();
 
-            log.info("Temporary chromedriver file: {}", driverFile);
-
-            log.debug("Setting the exe/writable attributes on the chromedriver file...");
             driverFile.setExecutable(true, false);
             driverFile.setWritable(true, false);
         } catch (Exception ex)
@@ -86,7 +80,6 @@ public class ChromeDriverConfig implements CleanerInterface
         // This section of code is needed for Linux systems to run in
         // the background using Xvfb graphics. The same chrome service
         // also runs under Windows without the DISPLAY being set.
-        log.debug("Starting chrome driver service...");
         if (SystemProperties.isLinux())
         {
             String xD = SystemProperties.getParam(SystemProperties.XDISPLAY);
@@ -103,7 +96,6 @@ public class ChromeDriverConfig implements CleanerInterface
             .withEnvironment(ImmutableMap.of("DISPLAY", SystemProperties.getParam(SystemProperties.XDISPLAY)))
             .build();
 
-        log.debug("Creating the web driver and initializing...");
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
         ChromeDriver dr;
         try
@@ -117,11 +109,10 @@ public class ChromeDriverConfig implements CleanerInterface
             dr = new ChromeDriver(serviceBuilder, desiredCapabilities);
         } catch (Exception ex)
         {
-            log.error("Unable to create the chrome driver: {}", ex.getMessage());
             ex.printStackTrace();
             throw ex;
         }
-        log.info("Chrome version: {}", dr.getCapabilities().getVersion());
+        System.out.print("Chrome version: {}" + dr.getCapabilities().getVersion());
 
         return dr;
     }
@@ -194,21 +185,21 @@ public class ChromeDriverConfig implements CleanerInterface
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("nix") || os.contains("nux"))
         {
-            log.debug("Linux/Unix OS");
+            // Linux/Unix OS
             driverExe = "chromedriver_linux";
             contentType = "application/x-sharedlib";
             osPlatform = "chromedriver_linux";
         }
         else if (os.contains("mac") || os.contains("os x"))
         {
-            log.debug("Mac");
+            // Mac
             driverExe = "chromedriver_mac";
             contentType = "text/plain";
             osPlatform = "chromedriver_mac";
         }
         else
         {
-            log.debug("Windows");
+            // Windows
             driverExe = "chromedriver.exe";
             contentType = "application/x-executable";
             osPlatform = "chromedriver.exe";

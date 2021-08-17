@@ -1,6 +1,5 @@
 package util;
 
-import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.htmlunit.corejs.javascript.JavaScriptException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.*;
@@ -16,7 +15,6 @@ import java.util.concurrent.TimeUnit;
  * @author bchristiansen
  * This class contains the util.SeleniumManager utilities.
  */
-@Slf4j
 public abstract class SeleniumBase
 {
     protected WebDriver driver;
@@ -40,7 +38,7 @@ public abstract class SeleniumBase
             waitForAlertNotPresent(SystemProperties.sVal, false);
         } catch (Exception ex)
         {
-            log.debug("An alert was not displayed, continuing.");
+            System.out.print("An alert was not displayed, continuing.");
         }
     }
 
@@ -61,7 +59,7 @@ public abstract class SeleniumBase
             waitForAlertNotPresent(SystemProperties.sVal, false);
         } catch (Exception ex)
         {
-            log.debug("An alert was not displayed, continuing.");
+            System.out.print("An alert was not displayed, continuing.");
         }
     }
 
@@ -106,7 +104,7 @@ public abstract class SeleniumBase
                 Thread.sleep(100);
             } catch (InterruptedException ie)
             {
-                System.out.println("Wait Interrupted");
+                System.out.print("Wait Interrupted");
             }
             text = item.getAttribute("value");
             size = text.length();
@@ -259,11 +257,11 @@ public abstract class SeleniumBase
             foo = this.getElementByLocator(locator, timeout);
         } catch (TimeoutException te)
         {
-            log.debug("There was a timeout looking for element: " + locator.toString());
+            System.out.print("There was a timeout looking for element: " + locator.toString());
             return false;
         } catch (ElementNotVisibleException env)
         {
-            log.debug("The element was found but is invisible: " + locator.toString());
+            System.out.print("The element was found but is invisible: " + locator.toString());
             return false;
         }
 
@@ -416,8 +414,6 @@ public abstract class SeleniumBase
 
     private WebElement getElementByLocator(By locator, int timeout)
     {
-        log.debug("Calling method getElementByLocator: " + locator.toString());
-
         int interval = 5;
         if (timeout <= 20) interval = 3;
         if (timeout <= 10) interval = 2;
@@ -735,7 +731,7 @@ public abstract class SeleniumBase
             Thread.sleep(1000L);
         } catch (InterruptedException ie)
         {
-            log.error("For some reason the click did not work. Message: {}", ie.getMessage());
+            System.out.print("For some reason the click did not work. Message: " + ie.getMessage());
             /* ignore */
         }
     }
@@ -768,7 +764,7 @@ public abstract class SeleniumBase
             ((JavascriptExecutor) driver).executeScript(mouseOverScript, hoverElement);
         } catch (JavaScriptException e)
         {
-            log.error("Element with {} is not attached to the page document: {}", hoverElement, e.getStackTrace());
+            System.out.print("Element with " + hoverElement + " is not attached to the page document: " + e.getStackTrace().toString());
         }
     }
 
@@ -848,7 +844,7 @@ public abstract class SeleniumBase
             slct.selectByIndex(index);
         } catch (Exception ex)
         {
-            log.error("Unable to find the Select list locator: " + locator.toString() +
+            System.out.print("Unable to find the Select list locator: " + locator.toString() +
                 " --- Stack Trace: " + ExceptionUtils.getStackTrace(ex));
             throw ex;
         }
@@ -870,7 +866,7 @@ public abstract class SeleniumBase
             slct.selectByVisibleText(visibleText);
         } catch (Exception ex)
         {
-            log.error("Unable to find the Select list locator : " + locator.toString() +
+            System.out.print("Unable to find the Select list locator : " + locator.toString() +
                 " --- Stack Trace: " + ExceptionUtils.getStackTrace(ex));
             throw ex;
         }
@@ -891,7 +887,7 @@ public abstract class SeleniumBase
             slct.selectByVisibleText(visibleText);
         } catch (Exception ex)
         {
-            log.error("Unable to find the Select list: " + element.toString() +
+            System.out.print("Unable to find the Select list: " + element.toString() +
                 " --- Stack Trace: " + ExceptionUtils.getStackTrace(ex));
             throw ex;
         }
@@ -1164,7 +1160,7 @@ public abstract class SeleniumBase
             if (failOnTimeout)
             {
 
-                log.error("Timed out looking for the alert: " +
+                System.out.print("Timed out looking for the alert: " +
                     " --- Stack Trace: " + ExceptionUtils.getStackTrace(ex));
                 throw ex;
             }
@@ -1223,7 +1219,7 @@ public abstract class SeleniumBase
         {
             if (failOnTimeout)
             {
-                log.error("Timed out waiting for aler to disapper" +
+                System.out.print("Timed out waiting for aler to disapper" +
                     " --- Stack Trace: " + ExceptionUtils.getStackTrace(ex));
                 throw ex;
             }
@@ -1325,7 +1321,7 @@ public abstract class SeleniumBase
         int count = 0;
         while (elements.size() < 1 && (count < iterations))
         {
-            log.debug("Waiting for the element to display: {} of {} attempts.", count + 1, iterations);
+            System.out.print("Waiting for the element to display: " + count + 1 + " of " + iterations + "attempts.");
             Utils.wait(2); // Do NOT change this.
             elements = driver.findElements(locator);
             count++;
@@ -1333,7 +1329,6 @@ public abstract class SeleniumBase
 
         if (elements.size() == 0)
         {
-            log.error("The element being waited for did not display. Locator: {}", locator.toString());
             throw new Exception("The element being waited for did not display. Locator: " + locator.toString());
         }
 
@@ -1358,7 +1353,7 @@ public abstract class SeleniumBase
                 ExpectedConditions.elementToBeClickable(item));
         } catch (Exception ex)
         {
-            log.error("Timed out waiting for item: " + item.toString() +
+            System.out.print("Timed out waiting for item: " + item.toString() +
                 " to become clickable. --- Stack Trace: " + ExceptionUtils.getStackTrace(ex));
             throw ex;
         }
@@ -1446,7 +1441,7 @@ public abstract class SeleniumBase
             }
         } catch (Exception ex)
         {
-            log.error("Timed out waiting for an iFrame: " + frameLocator + " to be available: ");
+            System.out.print("Timed out waiting for an iFrame: " + frameLocator + " to be available: ");
             throw ex;
         }
     }
@@ -1467,7 +1462,7 @@ public abstract class SeleniumBase
             }
         } catch (Exception ex)
         {
-            log.error("Timed out waiting for an iFrame to be available: ");
+            System.out.print("Timed out waiting for an iFrame to be available: ");
             throw ex;
         }
     }
@@ -1504,7 +1499,7 @@ public abstract class SeleniumBase
                 });
         } catch (TimeoutException e)
         {
-            log.error("Timed out waiting for item: " + element.toString());
+            System.out.print("Timed out waiting for item: " + element.toString());
             throw e;
         }
     }
@@ -1521,7 +1516,7 @@ public abstract class SeleniumBase
             SystemProperties.getLongWait().until(ExpectedConditions.visibilityOfElementLocated(item));
         } catch (Exception ex)
         {
-            log.error("Timed out waiting for item: " + item.toString());
+            System.out.print("Timed out waiting for item: " + item.toString());
             throw ex;
         }
     }
@@ -1542,7 +1537,7 @@ public abstract class SeleniumBase
             wait.until(expectation);
         } catch (Throwable ex)
         {
-            log.error("Timeout exception waiting for the page to load");
+            System.out.print("Timeout exception waiting for the page to load");
             throw new TimeoutException("Timeout exception waiting for the page to load --- Stack Trace: "
                 + ExceptionUtils.getStackTrace(ex));
         }
@@ -1638,7 +1633,7 @@ public abstract class SeleniumBase
             SystemProperties.getMediumWait().until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(element)));
         } catch (Exception ex)
         {
-            log.error("Timed out item: " + element.toString() +
+            System.out.print("Timed out item: " + element.toString() +
                 " waiting to be in refreshed state." + "--- Stack Trace: " + ExceptionUtils.getStackTrace(ex));
             throw ex;
         }
@@ -1668,7 +1663,7 @@ public abstract class SeleniumBase
                 });
         } catch (TimeoutException e)
         {
-            log.error("Timed out waiting for item: " + element.toString());
+            System.out.print("Timed out waiting for item: " + element.toString());
             throw e;
         }
     }
