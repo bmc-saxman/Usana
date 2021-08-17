@@ -34,6 +34,7 @@ public class Utils
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
         return calendar;
     }
+
     /**
      * Puts the thread to sleep for the specified number of seconds.
      *

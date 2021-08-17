@@ -1,6 +1,5 @@
 package util;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -11,8 +10,9 @@ import java.util.HashMap;
 import static util.Text.getRandomInteger;
 import static util.Text.getRandomText;
 
-//import org.testng.reporters.Files;
-@Slf4j
+/**
+ * @author bchristiansen
+ */
 public class IOHelper
 {
     private static final String SEPARATOR = ",";

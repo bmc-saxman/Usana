@@ -12,8 +12,8 @@ import java.io.OutputStream;
 import java.util.*;
 
 /**
- * @author bchristiansen
  * Many (possible) values related to system information.
+ * @author bchristiansen
  */
 public class SystemProperties
 {

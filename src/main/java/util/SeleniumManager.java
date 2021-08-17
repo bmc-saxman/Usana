@@ -1,6 +1,5 @@
 package util;
 
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.openqa.grid.common.exception.RemoteNotReachableException;
 import org.openqa.selenium.Dimension;
@@ -24,7 +23,6 @@ import java.util.Set;
  *
  * @author bchristiansen
  */
-@Slf4j
 public class SeleniumManager extends SeleniumBase implements CleanerInterface
 {
     // Window handling.

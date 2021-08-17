@@ -12,8 +12,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author bchristiansen
  * This class contains the util.SeleniumManager utilities.
+ * @author bchristiansen
  */
 public abstract class SeleniumBase
 {

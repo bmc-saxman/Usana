@@ -1,9 +1,6 @@
 package common
 
-import groovy.util.logging.Slf4j
-import http.OkHttpUtils
-import okhttp3.Response
-import org.json.JSONObject
+
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 import spock.lang.Stepwise
@@ -15,27 +12,15 @@ import util.Text
  * generic specbase setup for UI and API tests.
  * @author bchristiansen
  */
-@Slf4j
 @Stepwise
 abstract class UtilSpecBase extends Specification
 {
 
-    static Boolean scenarioPassed = true
     static String uniqueId
     protected static SeleniumManager sm = null
-    static String scenarioException = null
     protected static WebDriver driver
     protected static String mainWindow
-    static String screenshotUrl = null
     static int indexFeature = 0
-
-    //rest calls
-    private OkHttpUtils okHttpUtils
-    private JSONObject jsonObject
-    private String payloadBody
-    Response okHttpResponse
-
-    protected static Map customMap = [:]
 
     abstract void startUI()
 

@@ -5,7 +5,7 @@ import spock.lang.Shared
 import spock.lang.Stepwise
 
 @Stepwise
-class TestUsanaHome extends SpecBase
+class TestThePage extends SpecBase
 {
     @Shared WelcomeToTheInternet welcomeToTheInternet
 
@@ -21,10 +21,12 @@ class TestUsanaHome extends SpecBase
         true
     }
 
-    def "Step-1"()
+    def "Test 1"()
     {
         when:
-        welcomeToTheInternet.open()
+        welcomeToTheInternet
+            .open()
+            .challengingDOM()
 
         then:
         /**
@@ -33,5 +35,16 @@ class TestUsanaHome extends SpecBase
          * with these types of tests.
          */
         welcomeToTheInternet.isCanvasDisplayed()
+    }
+
+    def "Test 2"()
+    {
+        when:
+        welcomeToTheInternet
+            .open()
+            .forgottenPassword("random@someplace.ext")
+
+        then:
+        true
     }
 }

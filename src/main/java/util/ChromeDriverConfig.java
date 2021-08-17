@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author bchristiansen
  * Class to configure and build a ChromeWebDriver.
+ * @author bchristiansen
  */
 @Slf4j
 public class ChromeDriverConfig implements CleanerInterface

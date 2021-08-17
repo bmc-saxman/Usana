@@ -1,15 +1,12 @@
 package util;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * Created by bchristiansen
+ * @author bchristiansen
  */
-@Slf4j
 public class UnzipUtility
 {
     private static final int BUFFER_SIZE = 4096;

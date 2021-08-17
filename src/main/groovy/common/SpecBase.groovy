@@ -1,6 +1,5 @@
 package common
 
-import groovy.util.logging.Slf4j
 import spock.SpockWatcher
 import spock.lang.Stepwise
 import util.ActiveWindows
@@ -9,7 +8,6 @@ import util.SeleniumManager
 /**
  * @author bchristiansen
  */
-@Slf4j
 @Stepwise
 class SpecBase extends UtilSpecBase
 {
