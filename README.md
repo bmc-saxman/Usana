@@ -14,7 +14,7 @@ of my work on the chrome browser and did not test Firefox at this time. So pleas
 use the chrome browser for now.
 
 - You can also specify the chromedriver version. At this time I have only 
-included version 90, 91, and 92. 92 being the latest.
+included versions 90, 91, and 92. 92 being the latest.
 
 - To run on Linux requires the xDisplay value to be set. To run on the main 
 screen it should be set to :0, but can be set to other values if there is a
